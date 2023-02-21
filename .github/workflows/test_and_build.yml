@@ -17,5 +17,5 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: |
-        docker build -t forecast-watch-service\ --build-arg COMMIT_HASH=$(git rev-parse HEAD) .
+        docker build -t forecast-watch-service --build-arg COMMIT_HASH=$(git rev-parse HEAD) .
 # Next steps is to upload the docker image to AWS ECR.
