@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - "develop"
+      - "feature/*"
+      - "bug/*"
 jobs:
   test:
     runs-on: ubuntu-latest
