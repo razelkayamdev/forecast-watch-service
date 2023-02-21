@@ -1,0 +1,17 @@
+name: test and build a docker image
+on:
+  push:
+    branches:
+      - "master"
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+  build:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: |
+        docker build -t forecast-watch-service\
+        --build-arg COMMIT_HASH=$(git rev-parse HEAD) .
+# Next steps is to upload the docker image to AWS ECR.

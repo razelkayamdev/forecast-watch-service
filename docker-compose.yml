@@ -7,7 +7,9 @@ services:
     ports:
       - 3001:3001
     environment:
+     - COMMIT_HASH=running_via_docker_compose
      - HTTP_PORT=3001
+     - STORMGLASS_API_KEY=api_key+goes_here
     healthcheck:
       test: ["CMD", "curl", "-f", "http://server:3001/is_alive"]
       interval: 15s

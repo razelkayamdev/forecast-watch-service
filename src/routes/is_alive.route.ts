@@ -1,10 +1,20 @@
 import { Router, Request, Response, NextFunction } from "express";
 
-export const isAliveRoute = Router();
+type Configutarion = {
+  commitHash: string;
+};
 
-isAliveRoute.get("/is_alive", async (req: Request, res: Response, next: NextFunction) => {
-  res.status(200).json({
-    alive: true
+export function createIsAliveRoute(configutarion: Configutarion): Router {
+
+  const isAliveRoute = Router();
+
+  isAliveRoute.get("/is_alive", async (req: Request, res: Response, next: NextFunction) => {
+    res.status(200).json({
+      alive: true,
+      commitHash: configutarion.commitHash
+    });
+    next();
   });
-  next();
-});
+
+  return isAliveRoute;
+} 

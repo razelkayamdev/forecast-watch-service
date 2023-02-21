@@ -4,7 +4,7 @@ type IsAlive = {
     alive: boolean
 };
 
-test("POSTing and GETting a share", async () => {
+test("is alive endpoint", async () => {
     const getUrl = "http://localhost:3001/is_alive";
     const getResponse = await axios.get<IsAlive>(getUrl);
     const response = getResponse.data;

@@ -1,12 +1,18 @@
 import { ExpressServer } from "./express.server"
 
+type Configuration = {
+    port: number;
+    commitHash: string;
+};
+
 export class AppServer {
 
     private experssServer: ExpressServer;
 
-    constructor(httpPort: number) {
+    constructor(configuration: Configuration) {
         this.experssServer = new ExpressServer({
-            port: httpPort
+            commitHash: configuration.commitHash,
+            port: configuration.port
         });
     }
 
