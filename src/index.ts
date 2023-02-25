@@ -4,9 +4,10 @@ import { AppServer } from "./server/app.server";
 import { ForecastService } from "./services/forecast.service";
 import { NetworkingClient } from "./services/networking.service";
 import { forecastResopnse } from "../tests/resources/response.mock"
+import { ConfigurationLoader } from "./configuration/configuration";
 
 async function start() {
-    const configuration = loadConfiguration();
+    const configuration = new ConfigurationLoader().load();
     const server = new AppServer({
         commitHash: configuration.commitHash,
         port: configuration.port
@@ -34,20 +35,6 @@ async function start() {
     } catch (error) {
         console.log(error);
     }
-}
-
-type Configuration = {
-    commitHash: string;
-    port: number;
-    stormglassApiKey: string;
-};
-
-function loadConfiguration(): Configuration {
-    return {
-        commitHash: process.env.COMMIT_HASH!,
-        port: Number(process.env.HTTP_PORT!),
-        stormglassApiKey: process.env.STORMGLASS_API_KEY!
-    };
 }
 
 start();

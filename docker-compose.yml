@@ -1,5 +1,17 @@
 version: '3.8'
 services:
+  db:
+    container_name: mysql-db
+    platform: linux/x86_64
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: password_for_root_user
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./sql/db_creation_scheme.sql:/docker-entrypoint-initdb.d/1.sql"
+    healthcheck:
+      test: 'mysql --user=root --password=password_for_root_user --execute "SHOW DATABASES;"'
   server:
     container_name: server
     build:
@@ -16,3 +28,6 @@ services:
       retries: 3
       start_period: 5s
       timeout: 3s
+    depends_on:
+      db:
+        condition: service_healthy

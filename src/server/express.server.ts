@@ -2,6 +2,7 @@ import express from 'express';
 import { Application, Response, Request, NextFunction } from 'express';
 import { Server } from 'http';
 import { createIsAliveRoute } from '../routes/is_alive.route';
+import { createWatchpointsRoute } from '../routes/watchpoints.route';
 
 type Configuration = {
     port: number;
@@ -33,7 +34,10 @@ export class ExpressServer {
 
     private loadRouters() {
         const isAliveRoute = createIsAliveRoute({ commitHash: this.configuration.commitHash });
+        const watchpointsRoute = createWatchpointsRoute();
+        
         this.app.use(isAliveRoute);
+        this.app.use(watchpointsRoute);
     }
 
     private setupLogs() {
