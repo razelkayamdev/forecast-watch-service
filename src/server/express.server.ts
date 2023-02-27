@@ -2,11 +2,13 @@ import express from 'express';
 import { Application, Response, Request, NextFunction } from 'express';
 import { Server } from 'http';
 import { createIsAliveRoute } from '../routes/is_alive.route';
-import { createWatchpointsRoute } from '../routes/watchpoints.route';
+import { createWatchpointsApiRoute } from '../routes/watchpoints.api.route';
+import { Datastore } from '../services/datastore.service';
 
 type Configuration = {
     port: number;
     commitHash: string;
+    datastore: Datastore;
 };
 
 export class ExpressServer {
@@ -19,11 +21,12 @@ export class ExpressServer {
 
         this.app = express();
         this.app.use(express.json());
-        this.app.use(this.errorHandler);
         this.configuration = configuration;
 
         this.setupLogs();
         this.loadRouters();
+
+        this.app.use(this.errorHandler);
     }
 
     public listen() {
@@ -34,7 +37,9 @@ export class ExpressServer {
 
     private loadRouters() {
         const isAliveRoute = createIsAliveRoute({ commitHash: this.configuration.commitHash });
-        const watchpointsRoute = createWatchpointsRoute();
+        const watchpointsRoute = createWatchpointsApiRoute({
+            datastore: this.configuration.datastore
+        });
         
         this.app.use(isAliveRoute);
         this.app.use(watchpointsRoute);
@@ -45,9 +50,9 @@ export class ExpressServer {
         this.app.use(morgan("combined"));
     }
 
-    private errorHandler(err: any, req: Request, res: Response, next: NextFunction) {
-        console.error(err.stack);
-        res.status(500).send("Something broke!");
+    private errorHandler(err: Error, req: Request, res: Response, next: NextFunction) {
+        console.error(err.message);
+        res.status(500).send(err.message);
         next();
     }
 }

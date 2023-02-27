@@ -5,13 +5,13 @@ services:
     platform: linux/x86_64
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: password_for_root_user
+      MYSQL_ROOT_PASSWORD: password
     ports:
       - "3306:3306"
     volumes:
       - "./sql/db_creation_scheme.sql:/docker-entrypoint-initdb.d/1.sql"
     healthcheck:
-      test: 'mysql --user=root --password=password_for_root_user --execute "SHOW DATABASES;"'
+      test: 'mysql --user=root --password=password --execute "SHOW DATABASES;"'
   server:
     container_name: server
     build:
@@ -22,6 +22,11 @@ services:
      - COMMIT_HASH=running_via_docker_compose
      - HTTP_PORT=3001
      - STORMGLASS_API_KEY=api_key+goes_here
+     - DB_HOST=db
+     - DB_PORT=3306
+     - DB_USER=root
+     - DB_PASSWORD=password
+     - DB_NAME=forecast_watch
     healthcheck:
       test: ["CMD", "curl", "-f", "http://server:3001/is_alive"]
       interval: 15s

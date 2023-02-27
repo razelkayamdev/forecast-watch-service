@@ -1,17 +1,27 @@
-// Playground.
-
 import { AppServer } from "./server/app.server";
 import { ForecastService } from "./services/forecast.service";
 import { NetworkingClient } from "./services/networking.service";
 import { forecastResopnse } from "../tests/resources/response.mock"
 import { ConfigurationLoader } from "./configuration/configuration";
+import { Datastore } from "./services/datastore.service";
 
 async function start() {
     const configuration = new ConfigurationLoader().load();
+
+    const datastore = new Datastore({
+        host: configuration.dbHost,
+        port: configuration.dpPort,
+        user: configuration.dbUser,
+        password: configuration.dbPassword,
+        database: configuration.dbName
+    });
+
     const server = new AppServer({
         commitHash: configuration.commitHash,
-        port: configuration.port
+        port: configuration.serverPort,
+        datastore: datastore
     });
+
     server.start();
 
     // Turning off "real" requests, to minimize API consumption
@@ -31,7 +41,6 @@ async function start() {
             latitude: 32.088156,
             longitude: 34.763634
         });
-        console.log(forecast);
     } catch (error) {
         console.log(error);
     }
