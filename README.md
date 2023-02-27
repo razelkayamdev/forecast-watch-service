@@ -5,6 +5,7 @@ a service that watches the forecast and notifies when conditions enable surfing.
 ## Dependencies 
 - install dependencies by running `npm install`.
 - make sure to provide a `.env` file like in the `.env_example` with the relevant environment vars.
+- using [https://stormglass.io](https://stormglass.io) api key for weather information.
 
 ## Running the app
 ### locally

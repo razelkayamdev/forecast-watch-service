@@ -12,6 +12,6 @@ test("Forecast service returns data", async () => {
 
 const mockNetworkingClient = {
     async get<T>(url: URL) {
-        return Promise.resolve( {} as T);
+        return Promise.resolve( {} as T );
     }
 };

@@ -1,8 +1,10 @@
+import { Datastore } from "../services/datastore.service";
 import { ExpressServer } from "./express.server"
 
 type Configuration = {
     port: number;
     commitHash: string;
+    datastore: Datastore;
 };
 
 export class AppServer {
@@ -12,7 +14,8 @@ export class AppServer {
     constructor(configuration: Configuration) {
         this.experssServer = new ExpressServer({
             commitHash: configuration.commitHash,
-            port: configuration.port
+            port: configuration.port,
+            datastore: configuration.datastore
         });
     }
 
